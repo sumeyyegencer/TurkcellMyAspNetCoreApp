@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model List<Product>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+   
+<a asp-controller="products" asp-action="add" class="btn btn-success my-3"><i class="fa-solid fa-plus mx-1"></i>Ürün Ekle </a>
+
+<table class="table table-bordered table-hover">
+       <thead>
+           <tr>
+               <th>Id</th>
+               <th>Ürün Adı</th>
+               <th>Fiyat</th>
+            <th>Stok</th>
+            <th>İşlemler</th>
+           </tr>
+       </thead>
+
+
+       <tbody>
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.Price</td>
+                <td>@item.Stok</td>
+                <td><a asp-controller="products" asp-action="remove" asp-route-id="@item.Id"> <i class="fa-solid fa-trash mx-2" style="color:brown"></i> </a>
+                    <a asp-controller="products" asp-action="update" asp-route-id="@item.Id"> <i class="fa-solid fa-pen-to-square" style="color:goldenrod"></i> </a>
+                </td>
+            </tr>
+        }
+       
+       </tbody>
+   </table>
+
