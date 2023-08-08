@@ -6,9 +6,7 @@
         private static List<Product> _products = new List<Product>() { 
 
 
-            new() { Id = 1, Name = "Kalem1", Price = 15, Stok = 200 },
-            new () { Id = 2, Name = "Kalem2", Price = 45, Stok = 120 },
-            new () { Id = 3, Name = "Kalem3", Price = 65, Stok = 80}
+  
     
     };
 

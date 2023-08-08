@@ -3,6 +3,23 @@
     ViewData["Title"] = "Add";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@model Product
 
 <h1>Ürün Ekleme</h1>
 
+<form asp-controller="products" asp-action="add" method="post">
+
+    <label>Ürün Adı:</label>
+    <input type="text"  asp-for="Name"/>
+    <br />
+    <label>Ürün Fiyatı:</label>
+    <input type="text"  asp-for="Price"/>
+    <br />
+    <label>Stok:</label>
+    <input type="text"  asp-for="Stok"/>
+    <br />
+    <label>Ürün Rengi :</label>
+    <input type="text"  asp-for="Color"/>
+
+    <button type="submit">Kaydet</button>
+</form>
