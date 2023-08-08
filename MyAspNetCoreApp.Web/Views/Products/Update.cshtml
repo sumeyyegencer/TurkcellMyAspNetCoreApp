@@ -4,5 +4,27 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@model Product
+ 
 <h1>Ürün Güncelleme</h1>
+
+<form asp-controller="products" asp-action="update" method="post">
+
+    <input type="hidden"  asp-for="Id"/>
+
+    <label>Ürün Adı:</label>
+    <input type="text" asp-for="Name" />
+    <br />
+    <label>Ürün Fiyatı:</label>
+    <input type="text" asp-for="Price" />
+    <br />
+    <label>Stok:</label>
+    <input type="text" asp-for="Stok" />
+    <br />
+    <label>Ürün Rengi :</label>
+    <input type="text" asp-for="Color" />
+
+    <button type="submit">Güncelle</button>
+
+</form>
 

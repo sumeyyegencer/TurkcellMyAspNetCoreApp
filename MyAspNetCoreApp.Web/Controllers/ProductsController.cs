@@ -40,7 +40,7 @@ namespace MyAspNetCoreApp.Web.Controllers
             var product = _context.Products.Find(id);
             _context.Products.Remove(product);
             _context.SaveChanges();
-            
+            TempData["status"] = "Ürün başarıyla silindi.";//Remove actiondan Index actiona veri taşıdığımız için TemData'yı kullanıyoruz.
             return RedirectToAction("Index");
         }
 
@@ -55,14 +55,32 @@ namespace MyAspNetCoreApp.Web.Controllers
         {
             _context.Products.Add(newProduct);
             _context.SaveChanges();
+            TempData["status"] = "Ürün başarıyla eklendi.";
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
         public IActionResult Update(int id)
         {
+            var product = _context.Products.Find(id);
 
-            return View();
+            return View(product);
         }
+
+        [HttpPost]
+
+        public IActionResult Update(Product newProduct)
+        {
+            _context.Products.Update(newProduct);
+            _context.SaveChanges();
+
+            TempData["status"] = "Ürün başarıyla güncellendi.";
+
+            return RedirectToAction("Index");
+        }
+
+
+
 
 
     }
