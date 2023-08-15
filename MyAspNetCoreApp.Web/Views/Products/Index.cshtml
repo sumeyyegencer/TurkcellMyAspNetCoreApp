@@ -19,6 +19,9 @@
                <th>Fiyat</th>
             <th>Stok</th>
             <th>Renk</th>
+            <th>Yayınlanma Durumu</th>
+            <th>Açıklama</th>
+            <th>Yayınlanma Tarihi</th>
             <th>İşlemler</th>
            </tr>
        </thead>
@@ -33,6 +36,22 @@
                 <td>@item.Price</td>
                 <td>@item.Stok</td>
                 <td>@item.Color</td>
+                <td>
+                    @(item.isPublish ?"Evet":"Hayır")
+                </td>
+                <td>
+                            @if (item.Description.Length > 20){
+                                @item.Description.Substring(0,20)<span>...</span>
+                            }
+                            else{
+                                @item.Description
+                            }
+
+
+
+                </td>
+
+                <td>@item.puslishDate</td>
                 <td><a asp-controller="products" asp-action="remove" asp-route-id="@item.Id"> <i class="fa-solid fa-trash mx-2" style="color:brown"></i> </a>
                     <a asp-controller="products" asp-action="update" asp-route-id="@item.Id"> <i class="fa-solid fa-pen-to-square" style="color:goldenrod"></i> </a>
                 </td>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MyAspNetCoreApp.Web.Models;
 
 namespace MyAspNetCoreApp.Web.Controllers
@@ -47,6 +48,18 @@ namespace MyAspNetCoreApp.Web.Controllers
         [HttpGet]
         public IActionResult Add()
         {
+
+            ViewBag.ColorSelect = new SelectList(new List<ColorSelectList>()
+            {
+                new() {Data="Mavi",Value="Mavi" },
+                new() {Data="Sarı",Value="Sarı" },
+                new() {Data="Kırmızı",Value="Kırmızı" },
+                new() {Data="Turuncu",Value="Turuncu" },
+                new() {Data="Yeşil",Value="Yeşil" }
+
+
+            },"Value", "Data");
+
             return View();
         }
 
@@ -63,6 +76,16 @@ namespace MyAspNetCoreApp.Web.Controllers
         public IActionResult Update(int id)
         {
             var product = _context.Products.Find(id);
+            ViewBag.ColorSelect = new SelectList(new List<ColorSelectList>()
+            {
+                new() {Data="Mavi",Value="Mavi" },
+                new() {Data="Sarı",Value="Sarı" },
+                new() {Data="Kırmızı",Value="Kırmızı" },
+                new() {Data="Turuncu",Value="Turuncu" },
+                new() {Data="Yeşil",Value="Yeşil" }
+
+
+            }, "Value", "Data",product.Color);
 
             return View(product);
         }
