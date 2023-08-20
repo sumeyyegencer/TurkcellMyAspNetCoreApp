@@ -1,17 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MyAspNetCoreApp.Web.Models;
+using MyAspNetCoreApp.Web.ViewModels;
 
 namespace MyAspNetCoreApp.Web.Controllers
 {
     public class ProductsController : Controller
     {
         private AppDbContext _context;
+        private readonly IMapper _mapper;
         private readonly ProductRepository _productRepository;
 
-        public ProductsController(AppDbContext context) //Constructor 
+        public ProductsController(AppDbContext context,IMapper mapper) //Constructor 
         {
             _context = context;
+            _mapper = mapper;
 
             //if (!_context.Products.Any())
             //{
@@ -32,7 +37,7 @@ namespace MyAspNetCoreApp.Web.Controllers
         public IActionResult Index()
         {
             var products = _context.Products.ToList();
-            return View(products);
+            return View(_mapper.Map<List<ProductViewModel>>(products));
         }
 
         public IActionResult Remove(int id)
@@ -64,12 +69,42 @@ namespace MyAspNetCoreApp.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(Product newProduct)
+        public IActionResult Add(ProductViewModel newProduct)
         {
-            _context.Products.Add(newProduct);
-            _context.SaveChanges();
-            TempData["status"] = "Ürün başarıyla eklendi.";
-            return RedirectToAction("Index");
+            ViewBag.ColorSelect = new SelectList(new List<ColorSelectList>()
+            {
+                new() {Data="Mavi",Value="Mavi" },
+                new() {Data="Sarı",Value="Sarı" },
+                new() {Data="Kırmızı",Value="Kırmızı" },
+                new() {Data="Turuncu",Value="Turuncu" },
+                new() {Data="Yeşil",Value="Yeşil" }
+
+
+            }, "Value", "Data");
+
+            if (ModelState.IsValid)
+
+                try
+                {
+                    //throw new Exception("db hatası");
+                    _context.Products.Add(_mapper.Map<Product>(newProduct));
+                    _context.SaveChanges();
+                    TempData["status"] = "Ürün başarıyla eklendi.";
+                    return RedirectToAction("Index");
+
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError(String.Empty,"Ürün kaydedilirken bir hata meydana geldi.Lütfen daha sonra tekrar deneyiniz.");
+                    return View();
+                }
+          
+
+
+            else
+            {
+                return View();
+            }
         }
 
         [HttpGet]
@@ -87,20 +122,50 @@ namespace MyAspNetCoreApp.Web.Controllers
 
             }, "Value", "Data",product.Color);
 
-            return View(product);
+            return View(_mapper.Map<ProductViewModel>(product));
         }
 
         [HttpPost]
 
-        public IActionResult Update(Product newProduct)
+        public IActionResult Update(ProductViewModel updateProduct)
         {
-            _context.Products.Update(newProduct);
-            _context.SaveChanges();
+            if (!ModelState.IsValid)
+            {
+                var product = _context.Products.Find(updateProduct.Id);
+                ViewBag.ColorSelect = new SelectList(new List<ColorSelectList>()
+            {
+                new() {Data="Mavi",Value="Mavi" },
+                new() {Data="Sarı",Value="Sarı" },
+                new() {Data="Kırmızı",Value="Kırmızı" },
+                new() {Data="Turuncu",Value="Turuncu" },
+                new() {Data="Yeşil",Value="Yeşil" }
 
-            TempData["status"] = "Ürün başarıyla güncellendi.";
 
-            return RedirectToAction("Index");
+            }, "Value", "Data", product.Color);
+                return View();
+            }
+                _context.Products.Update(_mapper.Map<Product>(updateProduct));
+                _context.SaveChanges();
+
+                TempData["status"] = "Ürün başarıyla güncellendi.";
+
+                return RedirectToAction("Index");
+          
         }
+        public IActionResult HasProductName(string Name)
+        {
+            var anyProduct = _context.Products.Any(x => x.Name.ToLower() == Name.ToLower());
+
+            if(anyProduct)
+            {
+                return Json("Kaydetmeye çalıştığınız ürün ismi vertabanında bulunmaktadır.");
+            }
+            else
+            {
+                return Json(true);
+
+            }
+     }
 
 
 
