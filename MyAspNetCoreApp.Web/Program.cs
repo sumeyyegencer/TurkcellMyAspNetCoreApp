@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using MyAspNetCoreApp.Web.Models;
 using System.Reflection;
 
@@ -14,6 +15,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory()));
 
 var app = builder.Build();
 
@@ -31,6 +34,16 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "productgetbyid",
+    pattern: "{controller}/{action}/{productid?}");
+
+
+app.MapControllerRoute(
+    name: "Paganation",
+    pattern: "{controller}/{action}/{page?}/{pageSize}");
+
 
 app.MapControllerRoute(
     name: "default",

@@ -1,34 +1,27 @@
 ﻿
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Pages";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@model List<ProductViewModel>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-@if (TempData["status"]!=null)
-{
-    <div class="alert alert-primary" role="alert">@TempData["status"]</div>
-}
-<a asp-controller="products" asp-action="add" class="btn btn-success my-3"><i class="fa-solid fa-plus mx-1"></i>Ürün Ekle </a>
 
 <table class="table table-bordered table-hover">
-       <thead>
-           <tr>
-               <th>Id</th>
-               <th>Ürün Adı</th>
-               <th>Fiyat</th>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Ürün Adı</th>
+            <th>Fiyat</th>
             <th>Stok</th>
             <th>Renk</th>
             <th>Yayınlanma Durumu</th>
             <th>Açıklama</th>
             <th>Yayınlanma Tarihi</th>
             <th>İşlemler</th>
-           </tr>
-       </thead>
+        </tr>
+    </thead>
 
 
-       <tbody>
-        @foreach(var item in Model)
+    <tbody>
+        @foreach (var item in Model)
         {
             <tr>
                 <td>@item.Id</td>
@@ -37,15 +30,19 @@
                 <td>@item.Stok</td>
                 <td>@item.Color</td>
                 <td>
-                    @(item.isPublish ?"Evet":"Hayır")
+                    @(item.isPublish ? "Evet" : "Hayır")
                 </td>
                 <td>
-                            @if (item.Description.Length > 20){
-                                @item.Description.Substring(0,20)<span>...</span>
-                            }
-                            else{
-                                @item.Description
-                            }
+                    @if (item.Description.Length > 20)
+                    {
+                        @item.Description.Substring(0,20)
+
+                        <span>...</span>
+                    }
+                    else
+                    {
+                        @item.Description
+                    }
 
 
 
@@ -56,10 +53,10 @@
                     <a asp-controller="products" asp-action="getbyid" asp-route-productid="@item.Id"> <i class="fa-solid fa-circle-right" style="color:green"></i> </a>
                     <a asp-controller="products" asp-action="remove" asp-route-id="@item.Id"> <i class="fa-solid fa-trash mx-2" style="color:brown"></i> </a>
                     <a asp-controller="products" asp-action="update" asp-route-id="@item.Id"> <i class="fa-solid fa-pen-to-square" style="color:goldenrod"></i> </a>
+
                 </td>
             </tr>
         }
-       
-       </tbody>
-   </table>
 
+    </tbody>
+</table>

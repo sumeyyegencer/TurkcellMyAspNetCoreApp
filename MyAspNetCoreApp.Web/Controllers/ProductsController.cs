@@ -1,7 +1,9 @@
-﻿using AutoMapper;
+﻿using AspNetCore;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.FileProviders;
 using MyAspNetCoreApp.Web.Models;
 using MyAspNetCoreApp.Web.ViewModels;
 
@@ -12,6 +14,7 @@ namespace MyAspNetCoreApp.Web.Controllers
         private AppDbContext _context;
         private readonly IMapper _mapper;
         private readonly ProductRepository _productRepository;
+        private readonly IFileProvider _fileProvider;
 
         public ProductsController(AppDbContext context,IMapper mapper) //Constructor 
         {
@@ -40,6 +43,26 @@ namespace MyAspNetCoreApp.Web.Controllers
             return View(_mapper.Map<List<ProductViewModel>>(products));
         }
 
+
+        public IActionResult GetById(int productid)
+        {
+            var product = _context.Products.Find(productid);
+
+            return View(_mapper.Map<ProductViewModel>(product));
+        }
+
+        public IActionResult Pages(int page,int pageSize)
+        {
+            //page=1 pageSize=3 
+            //page=2 pageSize=3
+            //page=3 pageSize=3
+
+            var products = _context.Products.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            return View(_mapper.Map<List<ProductViewModel>>(products));
+        }
+
+
         public IActionResult Remove(int id)
 
         {
@@ -65,6 +88,10 @@ namespace MyAspNetCoreApp.Web.Controllers
 
             },"Value", "Data");
 
+            var categories = _context.Category.ToList();
+            ViewBag.categorySelect = new SelectList(categories, "Id", "Name");
+
+
             return View();
         }
 
@@ -81,6 +108,10 @@ namespace MyAspNetCoreApp.Web.Controllers
 
 
             }, "Value", "Data");
+
+            var categories =_context.Category.ToList();
+            ViewBag.categorySelect = new SelectList(categories, "Id", "Name");
+
 
             if (ModelState.IsValid)
 

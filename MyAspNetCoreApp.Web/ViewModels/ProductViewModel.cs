@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MyAspNetCoreApp.Web.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace MyAspNetCoreApp.Web.ViewModels
@@ -36,5 +37,10 @@ namespace MyAspNetCoreApp.Web.ViewModels
 
 
         public DateTime? puslishDate { get; set; }
+        public IFormFile Image { get; set; }
+
+
+        [Required(ErrorMessage = "Kategori alanı boş olamaz.")]
+        public int CategoryId { get; set; }
     }
 }
